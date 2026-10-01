@@ -1,0 +1,40 @@
+# Optional deployment entry point — vendor independent.
+#
+# This workflow builds the static `dist/` artifact once and publishes it
+# as a portable build artifact. It deploys NOWHERE by itself.
+#
+# To release to a host, either:
+#   1. Download the `static-dist` artifact and upload it to any static host, or
+#   2. Copy one of the provider examples in docs/deployment/ into a new
+#      workflow file (kept out of the core pipeline on purpose).
+#
+# Core rule: the application never imports provider SDKs or APIs.
+
+name: Build static artifact
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+        env:
+          VITE_SITE_URL: ${{ vars.SITE_URL || 'https://example.com' }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: static-dist
+          path: dist
+          retention-days: 30

@@ -1,0 +1,24 @@
+# deps / build
+node_modules/
+dist/
+
+# local env overrides only — .env holds committed public defaults (no secrets).
+# NEVER commit secrets anywhere: VITE_* values ship in the client bundle.
+.env.local
+.env.*.local
+
+# editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.local
+
+# logs / caches
+*.log
+.eslintcache
+
+# tsc -b emit for solution-style config (regenerated on every build)
+vite.config.js
+vite.config.d.ts
+*.tsbuildinfo

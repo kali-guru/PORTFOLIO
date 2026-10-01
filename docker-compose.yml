@@ -1,0 +1,19 @@
+# Vendor-neutral local / self-host runtime. No provider-specific services.
+services:
+  portfolio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Public build-time value only (never a secret). Override as needed:
+        #   VITE_SITE_URL=https://your-domain.com docker compose up --build
+        VITE_SITE_URL: ${VITE_SITE_URL:-https://example.com}
+    ports:
+      - '8080:8080'
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:8080/']
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s

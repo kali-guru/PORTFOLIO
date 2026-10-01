@@ -16,7 +16,7 @@ RUN npm run build
 # `nginx` user; the master process starts as root only to bind the port.
 # Port 8080 is unprivileged. For a fully rootless runtime, deploy the same
 # `dist/` output to any static host instead (see docs/deployment/).
-FROM nginx:1.27-alpine AS production
+FROM nginx:1.31-alpine AS production
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
 
